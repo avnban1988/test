@@ -20,7 +20,7 @@ pipeline
       //      choices: 'Yes\nNo',
         //    description: 'Upload the build artifacts for VeracodeScan',
           //  name: 'Veracode_Scan')
-				}
+	//			}
 	stages {
 		stage('Build') {
             steps {
