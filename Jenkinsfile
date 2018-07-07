@@ -20,14 +20,31 @@ pipeline
       //      choices: 'Yes\nNo',
         //    description: 'Upload the build artifacts for VeracodeScan',
           //  name: 'Veracode_Scan')
-	//			}
+			//	}
 	stages {
 		stage('Build') {
-            steps {
-				echo 'Pulling...' + env.BRANCH_NAME
-				sh 'build.sh'		
-				}
-
+						steps {
+							echo 'Pulling...' + env.BRANCH_NAME
+							sh 'build.sh'		
+							}
+						post {
+                success {
+	                step([$class: 'GitHubCommitStatusSetter',
+		                    contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'Install npm packages'],
+							statusBackrefSource: [$class: 'ManuallyEnteredBackrefSource', backref: '${BUILD_URL}'],
+		                    statusResultSource: [$class: 'ConditionalStatusResultSource',
+		                    results: [[$class: 'AnyBuildResult', message: 'Successful', result: 'SUCCESS', state: 'SUCCESS']]]
+		                    ])
+	                    }
+                failure {
+	                step([$class: 'GitHubCommitStatusSetter',
+		                    contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'Install npm packages'],
+							statusBackrefSource: [$class: 'ManuallyEnteredBackrefSource', backref: '${BUILD_URL}'],
+		                    statusResultSource: [$class: 'ConditionalStatusResultSource',
+		                    results: [[$class: 'AnyBuildResult', message: 'Failed', result: 'UNSTABLE', state: 'FAILURE']]]
+		                    ])
+	                    }
+                    }
 				}
 			}
 	}
