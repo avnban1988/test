@@ -1,7 +1,7 @@
 
 pipeline
 	{
-	agent { label 'Linux' }
+	agent { label 'master' }
 	// The options directive is for configuration that applies to the whole job.
 	environment {
 		// update the project name variable with  Project repository name
