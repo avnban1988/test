@@ -8,7 +8,7 @@ pipeline {
               
            // }
             steps {
-                echo "Hello, ${STARTED_BY}, nice to meet you."
+               sh 'echo "${BUILD_USER}"'
             }
         }
     }
